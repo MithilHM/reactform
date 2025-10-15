@@ -150,7 +150,7 @@ const RegistrationForm = () => {
         <GlassCard className="w-full max-w-md md:max-w-lg text-center shadow-2xl">
           <h2 className="text-2xl md:text-3xl font-bold text-matrix-green mb-2">REGISTRATION SUCCESSFUL</h2>
           <div className="text-base md:text-lg text-electric-cyan mb-4">
-            Your team has been registered for Hack the Matrix!
+            Your team has been registered for ALGO-VIBE!
           </div>
           <div className="mt-6 text-4xl md:text-6xl text-matrix-green animate-pulse">✓</div>
         </GlassCard>
@@ -167,7 +167,7 @@ const RegistrationForm = () => {
               TEAM REGISTRATION
             </h1>
             <div className="text-sm md:text-lg text-gray">
-              Register your team for Hack the Matrix
+              Register your team for ALGO-VIBE
             </div>
           </div>
           <MemberSection memberKey="leader" title="TEAM LEADER" />
