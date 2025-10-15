@@ -6,6 +6,7 @@ import GlassCard from './ui/GlassCard';
 import SparkButton from './ui/SparkButton';
 
 const schema = z.object({
+  teamName: z.string().min(2, "Team Name must be at least 2 characters"),
   leader: z.object({
     name: z.string().min(2, "Name must be at least 2 characters"),
     email: z.string().email("Invalid email format"),
@@ -37,10 +38,11 @@ const RegistrationForm = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const {
-    register, handleSubmit, formState: { errors }, reset
+    register, handleSubmit, formState: { errors }, reset, watch,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
+      teamName: '',
       leader: { name: '', email: '', phone: '', usn: '' },
       member1: { name: '', email: '', phone: '', usn: '' },
       member2: { name: '', email: '', phone: '', usn: '' }
@@ -74,9 +76,7 @@ const RegistrationForm = () => {
 
   const MemberSection = ({ memberKey, title }) => (
     <div className="space-y-2">
-      <div className="text-neon-blue font-bold text-lg md:text-xl mb-2 tracking-wide">
-        {title}
-      </div>
+      <div className="text-neon-blue font-bold text-lg md:text-xl mb-2 tracking-wide">{title}</div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-4">
         <div>
           <Label>Full Name</Label>
@@ -89,9 +89,8 @@ const RegistrationForm = () => {
               hover:border-neon-blue/50"
             autoComplete="off"
           />
-          {errors[memberKey]?.name && (
-            <p className="text-alert-red text-xs md:text-sm mt-1 font-matrix">{errors[memberKey].name.message}</p>
-          )}
+          {errors[memberKey]?.name &&
+            <p className="text-alert-red text-xs md:text-sm mt-1 font-matrix">{errors[memberKey].name.message}</p>}
         </div>
         <div>
           <Label>Email</Label>
@@ -105,9 +104,8 @@ const RegistrationForm = () => {
               hover:border-neon-blue/50"
             autoComplete="off"
           />
-          {errors[memberKey]?.email && (
-            <p className="text-alert-red text-xs md:text-sm mt-1 font-matrix">{errors[memberKey].email.message}</p>
-          )}
+          {errors[memberKey]?.email &&
+            <p className="text-alert-red text-xs md:text-sm mt-1 font-matrix">{errors[memberKey].email.message}</p>}
         </div>
         <div>
           <Label>Phone</Label>
@@ -120,9 +118,8 @@ const RegistrationForm = () => {
               hover:border-neon-blue/50"
             autoComplete="off"
           />
-          {errors[memberKey]?.phone && (
-            <p className="text-alert-red text-xs md:text-sm mt-1 font-matrix">{errors[memberKey].phone.message}</p>
-          )}
+          {errors[memberKey]?.phone &&
+            <p className="text-alert-red text-xs md:text-sm mt-1 font-matrix">{errors[memberKey].phone.message}</p>}
         </div>
         <div>
           <Label>USN</Label>
@@ -136,9 +133,8 @@ const RegistrationForm = () => {
               hover:border-neon-blue/50"
             autoComplete="off"
           />
-          {errors[memberKey]?.usn && (
-            <p className="text-alert-red text-xs md:text-sm mt-1 font-matrix">{errors[memberKey].usn.message}</p>
-          )}
+          {errors[memberKey]?.usn &&
+            <p className="text-alert-red text-xs md:text-sm mt-1 font-matrix">{errors[memberKey].usn.message}</p>}
         </div>
       </div>
     </div>
@@ -150,7 +146,7 @@ const RegistrationForm = () => {
         <GlassCard className="w-full max-w-md md:max-w-lg text-center shadow-2xl">
           <h2 className="text-2xl md:text-3xl font-bold text-matrix-green mb-2">REGISTRATION SUCCESSFUL</h2>
           <div className="text-base md:text-lg text-electric-cyan mb-4">
-            Your team has been registered for ALGO-VIBE!
+            {`Team "${watch('teamName')}" has been registered for ALGO-VIBE!`}
           </div>
           <div className="mt-6 text-4xl md:text-6xl text-matrix-green animate-pulse">✓</div>
         </GlassCard>
@@ -166,10 +162,31 @@ const RegistrationForm = () => {
             <h1 className="text-2xl md:text-4xl font-bold tracking-wider text-cyber-blue-400 mb-2">
               TEAM REGISTRATION
             </h1>
+            <div className="text-xl md:text-2xl font-bold text-neon-blue mb-2">
+              ALGO-VIBE
+            </div>
             <div className="text-sm md:text-lg text-gray">
               Register your team for ALGO-VIBE
             </div>
           </div>
+          {/* Team Name Field */}
+          <div className="my-6 flex flex-col items-center w-full">
+            <Label htmlFor="teamName">Team Name</Label>
+            <input
+              {...register('teamName')}
+              id="teamName"
+              placeholder="Enter team name"
+              className="w-full max-w-sm p-3 md:p-4 rounded-xl bg-hack-navy border border-glass-border
+                focus:border-cyber-blue-400 focus:ring-2 focus:ring-cyber-blue-400/30
+                text-white placeholder-gray outline-none transition-all duration-300
+                hover:border-neon-blue/50"
+              autoComplete="off"
+            />
+            {errors.teamName &&
+              <p className="text-alert-red text-xs md:text-sm mt-1 font-matrix">{errors.teamName.message}</p>}
+          </div>
+
+          {/* Team Member Sections */}
           <MemberSection memberKey="leader" title="TEAM LEADER" />
           <MemberSection memberKey="member1" title="TEAM MEMBER 1" />
           <MemberSection memberKey="member2" title="TEAM MEMBER 2" />

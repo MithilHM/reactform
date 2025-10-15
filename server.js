@@ -22,6 +22,7 @@ function initializeCsvFile() {
         const header = [
             'Registration Date',
             'Registration Time',
+            'Team Name',
             'Team Leader Name',
             'Team Leader Email',
             'Team Leader Phone',
@@ -46,6 +47,7 @@ function appendToCsv(formData) {
     const row = [
         now.toLocaleDateString('en-IN'),
         now.toLocaleTimeString('en-IN'),
+        formData.teamName,
         formData.leader.name,
         formData.leader.email,
         formData.leader.phone,
@@ -65,13 +67,13 @@ function appendToCsv(formData) {
 }
 
 app.get('/', (req, res) => {
-    res.send('Hackathon Registration API is running.');
+    res.send('ALGO-VIBE Registration API is running.');
 });
 
 app.post('/api/register', (req, res) => {
     try {
-        const { leader, member1, member2 } = req.body;
-        if (!leader || !member1 || !member2) {
+        const { teamName, leader, member1, member2 } = req.body;
+        if (!teamName || !leader || !member1 || !member2) {
             return res.status(400).json({ success: false, message: "Incomplete team data." });
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -79,12 +81,11 @@ app.post('/api/register', (req, res) => {
         if (allEmails.some(email => !emailRegex.test(email))) {
             return res.status(400).json({ success: false, message: "Invalid email address." });
         }
-        // USN check (optional on backend, frontend already does strict)
         const allUsns = [leader.usn, member1.usn, member2.usn];
         if (allUsns.some(usn => typeof usn !== 'string' || usn.length !== 10)) {
             return res.status(400).json({ success: false, message: "USN must be exactly 10 characters." });
         }
-        appendToCsv({ leader, member1, member2 });
+        appendToCsv({ teamName, leader, member1, member2 });
         return res.json({ success: true, message: "Team registered successfully!" });
     } catch (error) {
         console.error('Registration Error:', error);
@@ -100,7 +101,6 @@ app.get('/api/register/download', (req, res) => {
     }
 });
 
-// Run server
 app.listen(PORT, () => {
     console.log(`Registration backend running on http://localhost:${PORT}`);
     console.log(`POST registrations to /api/register`);
